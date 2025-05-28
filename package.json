@@ -1,0 +1,24 @@
+{
+  "name": "catalogue_generator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "catalogue_generator.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MarounS36/catalogue_generator.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/MarounS36/catalogue_generator/issues"
+  },
+  "homepage": "https://github.com/MarounS36/catalogue_generator#readme",
+  "dependencies": {
+    "puppeteer": "^24.9.0"
+  }
+}

@@ -112,11 +112,20 @@ class CatalogGenerator {
 
         .bottle-container {
             height: 200px;
-            padding-top: 50px;
+            padding-top: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
             margin-bottom: 20px;
+        }
+
+        .product-image {
+            max-width: 120px;
+            max-height: 180px;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
         .bottle {
@@ -151,6 +160,21 @@ class CatalogGenerator {
             font-weight: bold;
             text-align: center;
             width: 100%;
+        }
+
+        .image-placeholder {
+            width: 120px;
+            height: 180px;
+            background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%);
+            border: 2px dashed #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            color: #999;
+            font-size: 12px;
+            text-align: center;
+            padding: 10px;
         }
 
         .product-details {
@@ -299,11 +323,98 @@ class CatalogGenerator {
         `;
     }
 
+    // Utility method to convert image to base64 for PDF embedding
+    imageToBase64(imagePath) {
+        try {
+            if (!fs.existsSync(imagePath)) {
+                console.warn(`Image not found: ${imagePath}`);
+                return null;
+            }
+            
+            const imageBuffer = fs.readFileSync(imagePath);
+            const ext = path.extname(imagePath).toLowerCase();
+            let mimeType;
+            
+            switch (ext) {
+                case '.jpg':
+                case '.jpeg':
+                    mimeType = 'image/jpeg';
+                    break;
+                case '.png':
+                    mimeType = 'image/png';
+                    break;
+                case '.gif':
+                    mimeType = 'image/gif';
+                    break;
+                case '.webp':
+                    mimeType = 'image/webp';
+                    break;
+                default:
+                    console.warn(`Unsupported image format: ${ext}`);
+                    return null;
+            }
+            
+            return `data:${mimeType};base64,${imageBuffer.toString('base64')}`;
+        } catch (error) {
+            console.warn(`Error processing image ${imagePath}:`, error.message);
+            return null;
+        }
+    }
+
+    // Process products to convert local images to base64
+    processProductImages(products) {
+        return products.map(product => {
+            if (product.imagePath && !product.imagePath.startsWith('http')) {
+                // Convert local image path to base64
+                const base64Image = this.imageToBase64(product.imagePath);
+                if (base64Image) {
+                    return {
+                        ...product,
+                        imageUrl: base64Image,
+                        originalImagePath: product.imagePath
+                    };
+                }
+            }
+            return product;
+        });
+    }
+    
+
     generateProductCard(product) {
+        let imageHtml;
+        
+        // Check if product has an image path
+        if (product.imagePath) {
+            // Use actual product image
+            imageHtml = `
+                <img src="${product.imagePath}" 
+                     alt="${product.name}" 
+                     class="product-image"
+                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="image-placeholder" style="display: none;">
+                    <div>Image<br>Not Found<br><small>${product.name}</small></div>
+                </div>
+            `;
+        } else if (product.imageUrl) {
+            // Use image URL (for web images)
+            imageHtml = `
+                <img src="${product.imageUrl}" 
+                     alt="${product.name}" 
+                     class="product-image"
+                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="image-placeholder" style="display: none;">
+                    <div>Image<br>Not Found<br><small>${product.name}</small></div>
+                </div>
+            `;
+        } else {
+            // Fallback to CSS bottle design
+            imageHtml = `<div class="bottle" data-label="${product.label || 'PRODUCT'}"></div>`;
+        }
+        
         return `
         <div class="product-card">
             <div class="bottle-container">
-                <div class="bottle" data-label="${product.label || 'MARTINI'}"></div>
+                ${imageHtml}
             </div>
             <div class="size">${product.size}</div>
             <div class="product-details">
@@ -325,7 +436,9 @@ class CatalogGenerator {
     }
 
     generatePage(pageData) {
-        const productsHtml = pageData.products.map(product => this.generateProductCard(product)).join('');
+        // Process images for this page
+        const processedProducts = this.processProductImages(pageData.products);
+        const productsHtml = processedProducts.map(product => this.generateProductCard(product)).join('');
         
         return `
         <div class="container">

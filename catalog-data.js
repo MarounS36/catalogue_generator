@@ -12,7 +12,8 @@ const catalogData = [
                 ref: "00003934",
                 promoPrice: "7.50 €",
                 regularPrice: "12.00 €",
-                label: "MARTINI"
+                label: "MARTINI",
+                imagePath: "./images/martini-fiero.jpg" // Local image path
             },
             {
                 name: "Martini Rosso",
@@ -21,7 +22,8 @@ const catalogData = [
                 ref: "00003935",
                 promoPrice: "8.00 €",
                 regularPrice: "13.00 €",
-                label: "MARTINI"
+                label: "MARTINI",
+                imagePath: "./images/martini-rosso.jpg"
             },
             {
                 name: "Martini Bianco",
@@ -30,7 +32,8 @@ const catalogData = [
                 ref: "00003936",
                 promoPrice: "6.50 €",
                 regularPrice: "10.00 €",
-                label: "MARTINI"
+                label: "MARTINI",
+                imageUrl: "https://example.com/martini-bianco.jpg" // Web URL example
             },
             {
                 name: "Campari",
@@ -39,7 +42,8 @@ const catalogData = [
                 ref: "00003937",
                 promoPrice: "15.50 €",
                 regularPrice: "20.00 €",
-                label: "CAMPARI"
+                label: "CAMPARI",
+                imagePath: "./images/campari.png"
             },
             {
                 name: "Aperol",
@@ -48,7 +52,8 @@ const catalogData = [
                 ref: "00003938",
                 promoPrice: "12.50 €",
                 regularPrice: "16.00 €",
-                label: "APEROL"
+                label: "APEROL",
+                imagePath: "./images/aperol.jpg"
             },
             {
                 name: "Cynar",
@@ -58,6 +63,7 @@ const catalogData = [
                 promoPrice: "14.00 €",
                 regularPrice: "18.00 €",
                 label: "CYNAR"
+                // No image - will fallback to CSS bottle
             },
             {
                 name: "Pimm's No.1",
@@ -99,7 +105,8 @@ const catalogData = [
                 ref: "00004001",
                 promoPrice: "25.00 €",
                 regularPrice: "32.00 €",
-                label: "JW RED"
+                label: "JW RED",
+                imagePath: "./images/whisky/johnnie-walker-red.jpg"
             },
             {
                 name: "Johnnie Walker Black",
@@ -108,7 +115,8 @@ const catalogData = [
                 ref: "00004002",
                 promoPrice: "35.00 €",
                 regularPrice: "45.00 €",
-                label: "JW BLACK"
+                label: "JW BLACK",
+                imagePath: "./images/whisky/johnnie-walker-black.jpg"
             },
             {
                 name: "Jameson",
@@ -117,7 +125,8 @@ const catalogData = [
                 ref: "00004003",
                 promoPrice: "28.00 €",
                 regularPrice: "35.00 €",
-                label: "JAMESON"
+                label: "JAMESON",
+                imagePath: "./images/whisky/jameson.jpg"
             },
             {
                 name: "Chivas Regal 12",
